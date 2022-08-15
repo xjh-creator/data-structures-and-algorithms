@@ -8,7 +8,7 @@ type listNode struct {
 }
 
 //insert 在链表尾部插入值为v的新节点
-func (n *listNode)insert(v int)  {
+func (n *listNode)insert(v int) *listNode {
 	dummyHead := &listNode{}
 	dummyHead.next = n
 	cur := dummyHead
@@ -17,10 +17,11 @@ func (n *listNode)insert(v int)  {
 	}
 	cur.next = &listNode{val:v}
 	fmt.Println("插入了数值",v)
+	return dummyHead.next
 }
 
 //delete 从列表中删除值等于v的节点
-func (n *listNode)delete(v int) {
+func (n *listNode)delete(v int) *listNode{
 	dummyHead := &listNode{}
 	dummyHead.next = n
 	cur := dummyHead
@@ -31,6 +32,7 @@ func (n *listNode)delete(v int) {
 		cur.next = cur.next.next
 	}
 	fmt.Println("删除了数值",v)
+	return dummyHead.next
 }
 
 func (n *listNode)show()  {
@@ -42,39 +44,61 @@ func (n *listNode)show()  {
 }
 
 //get 获取链表中第index个节点的值
-func (n *listNode)get(index int)  {
+func (n *listNode)get(index int) int {
 	head := n
 	for i := 1;head != nil;i++{
 		if i == index{
 			fmt.Printf("第%d个节点的值为：%d \n",i,head.val)
-			return
+			return head.val
 		}
 		head = head.next
 	}
 }
 
 //addAtHead 在链表的第一个元素之前添加一个值为 val 的节点。
-func (n *listNode)addAtHead(val int){
-	newNode := &listNode{
+func (n *listNode)addAtHead(val int) *listNode{
+	return &listNode{
 		val: val,
 		next: n,
 	}
-	n = newNode
 }
 
+// revListed 反转链表
+func revListed(head *listNode) *listNode {
+	var pre *listNode
+	cur := head
+	for cur != nil{
+		next := cur.next
+		cur.next = pre
+		pre = cur
+		cur = next
+	}
+	return pre
+}
 
 func main()  {
 	head := &listNode{val: 1}
 	node1 := &listNode{val: 2}
 	node2 := &listNode{val: 3}
+	node3 := &listNode{val: 4}
 	head.next = node1
 	node1.next = node2
-	//head.show()
-    //head.insert(4)
-	//head.show()
-	//head.delete(2)
-	//head.get(2)
-	head.show()
-	head.addAtHead(0)
-	head.show()
+	node2.next = node3
+	revListed(head).show()
 }
+
+//func main()  {
+//	head := &listNode{val: 1}
+//	node1 := &listNode{val: 2}
+//	node2 := &listNode{val: 3}
+//	head.next = node1
+//	node1.next = node2
+//	//head.show()
+//    //head.insert(4)
+//	//head.show()
+//	//head.delete(2)
+//	//head.get(2)
+//	head.show()
+//	head.addAtHead(0)
+//	head.show()
+//}
