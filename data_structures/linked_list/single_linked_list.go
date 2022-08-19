@@ -53,6 +53,7 @@ func (n *listNode)get(index int) int {
 		}
 		head = head.next
 	}
+	return 0
 }
 
 //addAtHead 在链表的第一个元素之前添加一个值为 val 的节点。
@@ -76,6 +77,24 @@ func revListed(head *listNode) *listNode {
 	return pre
 }
 
+// changeNodePerTwo
+func changeNodePerTwo(head *listNode) *listNode {
+	dummyHead := &listNode{}
+	dummyHead.next = head
+	cur := dummyHead
+
+	for head != nil && head.next != nil{
+		cur.next = head.next
+		next := head.next.next
+		head.next.next = head
+		head.next = next
+
+		cur = head
+		head = next
+	}
+	return dummyHead.next
+}
+
 func main()  {
 	head := &listNode{val: 1}
 	node1 := &listNode{val: 2}
@@ -84,7 +103,7 @@ func main()  {
 	head.next = node1
 	node1.next = node2
 	node2.next = node3
-	revListed(head).show()
+	changeNodePerTwo(head).show()
 }
 
 //func main()  {
