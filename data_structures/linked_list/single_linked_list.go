@@ -113,17 +113,60 @@ func delLaterNode(head *listNode,n int)*listNode{
 	return dummyHead.next
 }
 
+func getIntersectionNode(headA,headB *listNode) *listNode {
+	curA := headA
+	curB := headB
+	lenA, lenB := 0, 0
+	// 求A，B的长度
+	for curA != nil {
+		curA = curA.next
+		lenA++
+	}
+	for curB != nil {
+		curB = curB.next
+		lenB++
+	}
+	var step int
+	var fast, slow *listNode
+	// 请求长度差，并且让更长的链表先走相差的长度
+	if lenA > lenB {
+		step = lenA - lenB
+		fast, slow = headA, headB
+	} else {
+		step = lenB - lenA
+		fast, slow = headB, headA
+	}
+	for i:=0; i < step; i++ {
+		fast = fast.next
+	}
+	// 遍历两个链表遇到相同则跳出遍历
+	for fast != slow {
+		fast = fast.next
+		slow = slow.next
+	}
+	return fast
+}
 
 func main()  {
-	head := &listNode{val: 1}
+	head1 := &listNode{val: 1}
 	node1 := &listNode{val: 2}
 	node2 := &listNode{val: 3}
 	node3 := &listNode{val: 4}
-	head.next = node1
+	node4 := &listNode{val: 3}
+	node5 := &listNode{val: 4}
+	node6 := &listNode{val: 10}
+	head1.next = node1
 	node1.next = node2
 	node2.next = node3
 	//changeNodePerTwo(head).show()
-	delLaterNode(head,1).show()
+	head2 := &listNode{val: 1}
+	head2.next = node6
+	node6.next = node4
+	node4.next = node5
+
+	getIntersectionNode(head1,head2).show()
+
+	//delLaterNode(head,1).show()
 }
 
 //func main()  {
