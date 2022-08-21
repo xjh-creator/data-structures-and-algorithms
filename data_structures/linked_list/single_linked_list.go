@@ -77,7 +77,7 @@ func revListed(head *listNode) *listNode {
 	return pre
 }
 
-// changeNodePerTwo
+// changeNodePerTwo 两两交换链表中相邻的结点
 func changeNodePerTwo(head *listNode) *listNode {
 	dummyHead := &listNode{}
 	dummyHead.next = head
@@ -95,6 +95,25 @@ func changeNodePerTwo(head *listNode) *listNode {
 	return dummyHead.next
 }
 
+//delLaterNode 删除最后第n个节点
+func delLaterNode(head *listNode,n int)*listNode{
+	dummyHead := &listNode{next: head}
+	pre := dummyHead
+	cur := head
+
+	i := 1
+	if cur != nil{
+		cur = cur.next
+		if i > n{
+			pre = pre.next
+		}
+		i++
+	}
+	pre.next = pre.next.next
+	return dummyHead.next
+}
+
+
 func main()  {
 	head := &listNode{val: 1}
 	node1 := &listNode{val: 2}
@@ -103,7 +122,8 @@ func main()  {
 	head.next = node1
 	node1.next = node2
 	node2.next = node3
-	changeNodePerTwo(head).show()
+	//changeNodePerTwo(head).show()
+	delLaterNode(head,1).show()
 }
 
 //func main()  {
