@@ -1,4 +1,4 @@
-package main
+package linked_list
 
 import "fmt"
 
@@ -82,16 +82,4 @@ func (head *circleNode) Show() {
 		}
 		temp = temp.Next
 	}
-}
-
-func main()  {
-	head1 := &circleNode{ID: 1}
-	node1 := &circleNode{ID: 2}
-	node2 := &circleNode{ID: 3}
-	node3 := &circleNode{ID: 4}
-	head1.Next = node1
-	node1.Next = node2
-	node2.Next = node3
-	node3.Next = head1
-	head1.Show()
 }
