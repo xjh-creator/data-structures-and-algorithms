@@ -138,3 +138,113 @@ func (this *LinkedList) Print() {
 	}
 	fmt.Println(format)
 }
+
+// revListed 反转链表
+func (this *LinkedList)revListed() *ListNode {
+	var pre *ListNode
+	cur := this.head
+	for cur != nil{
+		tmp := cur.next
+		cur.next = pre
+		pre = cur
+		cur = tmp
+	}
+	return cur
+}
+
+// checkCircle 链表中环的检测，快慢指针法，存在环总会相遇
+func (this *LinkedList)checkCircle() bool {
+	if this.head == nil || this.head.next == nil{
+		return false
+	}
+	first := this.head
+	second := this.head.next
+	for first != nil && second.next != nil{ // 如果是环，first 和 second 都不会为 nil
+		first = first.next
+		second = second.next.next
+		if second == nil{
+			return false
+		}
+		if first == second{
+			return true
+		}
+	}
+	return false
+}
+
+// mergeSortedLinkedList 合并两个有序链表
+func mergeSortedLinkedList(a,b *LinkedList) *LinkedList {
+	if a.head == nil{
+		return b
+	}
+	if b.head == nil{
+		return a
+	}
+
+	tempNode := NewListNode(-1)
+	temp := tempNode
+	num := 0
+	for a.head != nil && b.head != nil{
+		if a.head.value.(int) < b.head.value.(int){
+			temp.next = a.head
+			temp = temp.next
+			a.head = a.head.next
+		}else{
+			temp.next = b.head
+			temp = temp.next
+			b.head = b.head.next
+		}
+		num++
+	}
+	if a.head == nil{
+		temp.next = b.head
+	}
+	if b.head == nil{
+		temp.next = a.head
+	}
+	newList := NewLinkedList()
+	newList.head = tempNode.next
+	return newList
+}
+
+// deleteLastNode 删除倒数第 n 个节点
+func (this *LinkedList)deleteLastNode(n int) bool{
+	if this.head == nil{
+		return false
+	}
+	low,fast := this.head,this.head
+	for i:=0;i < n;i++{ // 快慢指针，中间相距 n 个节点，快指针到链表尾部，慢指针下一个位置就是要删除的节点位置
+		if fast.next == nil{
+			return false
+		}
+		fast = fast.next
+	}
+
+	for fast.next != nil{
+		low = low.next
+		fast = fast.next
+	}
+	low.next = low.next.next
+	return true
+}
+
+// getMiddleNode 获取链表的中间节点
+func (this *LinkedList)getMiddleNode() *ListNode{
+	if this.head == nil{
+		return nil
+	}
+
+	cur,temp := this.head,this.head
+	count := 0
+
+	for cur != nil{
+		count++
+		cur = cur.next
+	}
+	for i := 0;i < count / 2;i++{
+		temp = temp.next
+	}
+	return temp
+}
+
+

@@ -24,11 +24,11 @@ func (head *circleNode) Delete(deleteNode *circleNode) *circleNode {
 	}
 	flag := true
 	for {
-		if temp.Next == head {
+		if temp.Next == head { //说明遍历一圈了，还没找到，但此时temp 遍历到链尾节点，没作判断，所以下面有了 if flag
 			break
 		}
-		if temp.ID == deleteNode.ID {
-			if temp == head {
+		if temp.ID == deleteNode.ID { // 找到要删除的节点了
+			if temp == head { // 要删除的节点是头节点
 				head = head.Next
 			}
 			helper.Next = temp.Next
@@ -38,7 +38,7 @@ func (head *circleNode) Delete(deleteNode *circleNode) *circleNode {
 		temp = temp.Next
 		helper = helper.Next //移动，一旦找到就要删除的节点
 	}
-	if flag {
+	if flag { // 如果删除的节点是链尾节点
 		if temp.ID == deleteNode.ID {
 			helper.Next = temp.Next
 			fmt.Printf("[%d]\n", deleteNode.ID)
