@@ -16,3 +16,11 @@ func TestIsAnagram(t *testing.T) {
 	fmt.Printf("%s和%s是否是异同字符串: ",str3,str4)
 	fmt.Println(IsAnagram(str3,str4))
 }
+
+func TestCommonChars(t *testing.T) {
+	words1 := []string{"bella","label","roller"}
+	fmt.Println(CommonChars(words1))
+
+	words2 := []string{"cool","lock","cook"}
+	fmt.Println(CommonChars(words2))
+}
