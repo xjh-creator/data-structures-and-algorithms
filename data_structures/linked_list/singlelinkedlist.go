@@ -1,4 +1,4 @@
-package single
+package linked_list
 
 import "fmt"
 
@@ -229,7 +229,7 @@ func (this *LinkedList)deleteLastNode(n int) bool{
 }
 
 // getMiddleNode 获取链表的中间节点
-func (this *LinkedList)getMiddleNode() *ListNode{
+func (this *LinkedList)getMiddleNode() *ListNode {
 	if this.head == nil{
 		return nil
 	}
