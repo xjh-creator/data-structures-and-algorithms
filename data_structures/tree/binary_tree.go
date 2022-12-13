@@ -18,7 +18,7 @@ func preOrder(root *Node) {
 	preOrder(root.right)
 }
 
-// inOrder 中序遍历
+// inOrder 中序遍历，
 func inOrder(root *Node) {
 	if root == nil {
 		return
