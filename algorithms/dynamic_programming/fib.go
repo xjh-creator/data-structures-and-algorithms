@@ -1,4 +1,4 @@
-package dongtai
+package dynamic_programming
 
 // Fib 斐波那锲
 func Fib(n int) int {

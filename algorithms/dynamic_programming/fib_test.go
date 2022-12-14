@@ -1,4 +1,4 @@
-package dongtai
+package dynamic_programming
 
 import "testing"
 
