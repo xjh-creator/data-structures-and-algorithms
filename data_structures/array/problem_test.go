@@ -29,3 +29,8 @@ func TestSortedSquares(t *testing.T) {
 	fmt.Println(resutl2)
 }
 
+func TestMinSubArrayLen(t *testing.T) {
+	nums := []int{1,4,4}
+	fmt.Println(MinSubArrayLen(4,nums))
+}
+
