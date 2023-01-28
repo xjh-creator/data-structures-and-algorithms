@@ -6,4 +6,5 @@ type Stack interface {
 	IsEmpty() bool
 	Top() interface{}
 	Flush()
+	GetAllDataInString() string
 }

@@ -48,6 +48,10 @@ func (this *ArrayQueue) DeQueue() interface{} {
 	return v
 }
 
+func (this *ArrayQueue) Top() interface{} {
+	return this.q[this.head]
+}
+
 func (this *ArrayQueue) String() string {
 	if this.head == this.tail {
 		return "empty queue"

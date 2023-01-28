@@ -61,6 +61,19 @@ func (this *ArrayStack) Flush() {
 	this.top = -1
 }
 
+func (this *ArrayStack)GetAllDataInString() string {
+	length := this.top + 1
+	if length < 1{
+		return ""
+	}
+	result := ""
+	for _,v := range this.data{
+		temp := string(v.(rune))
+		result = fmt.Sprintf("%s%s",result,temp)
+	}
+	return result
+}
+
 func (this *ArrayStack) Print() {
 	if this.IsEmpty() {
 		fmt.Println("empty statck")
