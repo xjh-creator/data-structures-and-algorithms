@@ -34,7 +34,6 @@ func main()  {
 		}
 		solve(s + b,t,minStep)
 		solve(s - b,t,minStep)
-
 		minStep++
 		solve(s - a,t,minStep)
 		solve(s + a,t,minStep)
@@ -43,7 +42,7 @@ func main()  {
 	solve(s,t,0)
 	if len(result) > 0{
 		sort.Ints(result)
-		fmt.Println(result)
+		fmt.Println(result[0])
 	}
 	fmt.Println(1)
 }

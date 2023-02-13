@@ -50,13 +50,13 @@ func main()  {
 		}else if sLen == 2{
 			result = append(result,secondList)
 		}else if fLen == 4{
-			result = getFourResult(firstList)
+			result = getResult(firstList)
 		}else if sLen == 4{
-			result = getFourResult(secondList)
+			result = getResult(secondList)
 		}else if fLen == 3{
-			result = getTreeResult(firstList)
+			result = getResult(firstList)
 		}else if sLen == 3{
-			result = getTreeResult(secondList)
+			result = getResult(secondList)
 		}
 	}else{
 		if fLen == 1{
@@ -104,20 +104,17 @@ func main()  {
 	fmt.Println(result)
 }
 
-
-
-func getTreeResult(array []string) [][]string {
-	return [][]string{
-		{array[0],array[1]},{array[0],array[2]},
-		{array[1],array[2]},
+func getResult(array []string) [][]string {
+	if len(array) == 0{
+		return nil
 	}
-}
-
-func getFourResult(array []string) [][]string {
-	return [][]string{
-		{array[0],array[1]},{array[0],array[2]},{array[0],array[3]},
-		{array[1],array[2]},{array[1],array[3]},
-		{array[2],array[3]},
+	res := [][]string{}
+	for i:=0;i<len(array) - 1;i++{
+		for j:=i+1;j<len(array);j++{
+			temp := []string{array[i],array[j]}
+			res = append(res,temp)
+		}
 	}
+	return res
 }
 
