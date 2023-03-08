@@ -64,3 +64,7 @@ func isValid(n, row, col int, chessboard [][]string) bool {
 	}
 	return true
 }
+
+
+
+
