@@ -6,3 +6,11 @@ it is personal study for data-structures-and-algorithms.
 ##测试命令
 go test -run=IsValid -v
 
+##力扣刷题纪录 
+1. 二分查找 704. 2023-03-24
+2. 移除元素（双指针） 27 , 删除有序数组中的重复项 26. 2023-03-28
+3. 有序数组的平方（双指针） 977 . 2023-03-29
+4. 209.长度最小的子数组（滑动窗口） . 2023-03-31
+5. generateMatrix 59.螺旋矩阵II . 2023-04-01
+
+

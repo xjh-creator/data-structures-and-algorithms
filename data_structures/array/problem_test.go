@@ -34,3 +34,7 @@ func TestMinSubArrayLen(t *testing.T) {
 	fmt.Println(MinSubArrayLen(4,nums))
 }
 
+func TestSearchRange(t *testing.T) {
+	nums := []int{1,4}
+	fmt.Println(SearchRange(nums,4))
+}
