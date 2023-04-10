@@ -221,3 +221,79 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 
 	return head
 }
+
+/*
+给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。
+*/
+
+// getIntersectionNode 160.链表相交
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	lenA := 0
+	tempA := headA
+	for tempA != nil{
+		lenA++
+		tempA = tempA.next
+	}
+
+	lenB := 0
+	tempB := headB
+	for tempB != nil{
+		lenB++
+		tempB = tempB.next
+	}
+
+	var fast, slow *ListNode
+	step := 0
+
+	if lenA > lenB {
+		step = lenA - lenB
+		fast, slow = headA, headB
+	} else {
+		step = lenB - lenA
+		fast, slow = headB, headA
+	}
+
+	for i:=0; i < step; i++ {
+		fast = fast.next
+	}
+
+	// 遍历两个链表遇到相同则跳出遍历
+	for fast != slow {
+		fast = fast.next
+		slow = slow.next
+	}
+
+	return fast
+}
+
+/*
+	给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+
+	如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，
+
+	评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。如果 pos 是 -1，则在该链表中没有环。
+
+	注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+
+	不允许修改 链表。
+
+*/
+
+// detectCycle 142. 环形链表 II
+func detectCycle(head *ListNode) *ListNode {
+	slow,fast := head,head
+
+	for fast != nil && fast.next != nil{
+		slow = slow.next
+		fast = fast.next.next
+		if slow == fast{
+			for head != slow{
+				slow = slow.next
+				head = head.next
+			}
+			return head
+		}
+	}
+
+	return nil
+}

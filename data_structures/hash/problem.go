@@ -12,7 +12,7 @@ import "sort"
 说明: 你可以假设字符串只包含小写字母。
 */
 
-// IsAnagram 有效的字母异同位
+// IsAnagram 242.有效的字母异同位
 func IsAnagram(s string,t string) bool{
 	if len(s) != len(t){
 		return false
@@ -41,7 +41,7 @@ func IsAnagram(s string,t string) bool{
 1 <= words.length <= 100 1 <= words[i].length <= 100 words[i] 由小写英文字母组成
 */
 
-// CommonChars 查找常用字符串
+// CommonChars 1002. 查找常用字符串
 // 思路：每个字符串26位二进制（每位存字符串所含字符的出现次数），纵向比对，保留次数小的
 func CommonChars(words []string) []string {
    length := len(words)
@@ -83,6 +83,7 @@ func min(a,b int) int {
     返回 它们的交集。输出结果中的每个元素一定是 唯一 的。我们可以 不考虑输出结果的顺序 。
 */
 
+// intersection 349. 两个数组的交集
 func intersection(nums1,nums2 []int) []int {
 	set:=make(map[int]struct{},0)  // 用map模拟set
 	res:=make([]int,0)
@@ -99,6 +100,45 @@ func intersection(nums1,nums2 []int) []int {
 		}
 	}
 	return res
+}
+
+/*
+编写一个算法来判断一个数 n 是不是快乐数。
+
+「快乐数」定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。如果 可以变为  1，那么这个数就是快乐数。
+
+如果 n 是快乐数就返回 True ；不是，则返回 False 。
+
+示例：
+
+输入：19
+输出：true
+解释：
+1^2 + 9^2 = 82
+8^2 + 2^2 = 68
+6^2 + 8^2 = 100
+1^2 + 0^2 + 0^2 = 1
+*/
+
+// isHappy 202. 快乐数
+func isHappy(n int) bool {
+	getSum := func(num int) int{
+		sum := 0
+		for num > 0{
+			sum += (num % 10) * (num % 10)
+			num = num / 10
+		}
+
+		return sum
+	}
+
+	temp := make(map[int]bool,0)
+	for n != 1 && !temp[n]{
+		temp[n] = true
+		n = getSum(n)
+	}
+
+	return n == 1
 }
 
 /*
