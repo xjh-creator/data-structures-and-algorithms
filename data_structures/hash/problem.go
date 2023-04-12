@@ -171,6 +171,65 @@ func twoSum(nums []int, target int) []int {
 }
 
 /*
+	给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。
+
+    为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。所有整数的范围在 -2^28 到 2^28 - 1 之间，最终结果不会超过 2^31 - 1 。
+*/
+
+// fourSumCount 454.四数相加II
+func fourSumCount(nums1 []int, nums2 []int, nums3 []int, nums4 []int) int {
+	tempMap := map[int]int{}
+
+	// 遍历nums1和nums2数组，统计两个数组元素之和，和出现的次数，放到map中
+	for _,v1 := range nums1{
+		for _,v2 := range nums2{
+			tempMap[v1 + v2]++
+		}
+	}
+
+	count := 0
+	// 遍历nums3和nums4数组，找到如果 0-(c+d) 在map中出现过的话，就把map中key对应的value也就是出现次数统计出来
+	for _,v3 := range nums3{
+		for _,v4 := range nums4{
+			if v,ok := tempMap[0 - v3 - v4];ok{
+				count += v
+			}
+		}
+	}
+
+	return count
+}
+
+/*
+	给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。
+
+	(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)
+
+	注意：
+
+	你可以假设两个字符串均只含有小写字母。
+
+	canConstruct("a", "b") -> false
+	canConstruct("aa", "ab") -> false
+	canConstruct("aa", "aab") -> true
+*/
+
+// canConstruct 383. 赎金信
+func canConstruct(ransomNote string, magazine string) bool {
+	record := make([]int, 26)
+	for _, v := range magazine {   // 通过recode数据记录 magazine里各个字符出现次数
+		record[v-'a']++
+	}
+	for _, v := range ransomNote { // 遍历ransomNote，在record里对应的字符个数做--操作
+		record[v-'a']--
+		if record[v-'a'] < 0 {     // 如果小于零说明ransomNote里出现的字符，magazine没有
+			return false
+		}
+	}
+	return true
+}
+
+/*
 	给你一个包含 n 个整数的数组nums，判断nums中是否存在三个元素 a，b，c ，使得a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
 
 	注意： 答案中不可以包含重复的三元组。
