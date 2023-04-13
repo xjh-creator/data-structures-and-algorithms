@@ -240,7 +240,7 @@ func canConstruct(ransomNote string, magazine string) bool {
 
 	满足要求的三元组集合为： [ [-1, 0, 1], [-1, -1, 2] ]
 */
-// ThreeSum 三数之和
+// ThreeSum 15. 三数之和
 // 思路：
 func ThreeSum(nums []int) [][]int {
 	length := len(nums)
