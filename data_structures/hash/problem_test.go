@@ -17,10 +17,10 @@ func TestIsAnagram(t *testing.T) {
 	fmt.Println(IsAnagram(str3,str4))
 }
 
-func TestCommonChars(t *testing.T) {
-	words1 := []string{"bella","label","roller"}
-	fmt.Println(CommonChars(words1))
+func TestFourSum(t *testing.T) {
+	nums := []int{1,0,-1,0,-2,2}
 
-	words2 := []string{"cool","lock","cook"}
-	fmt.Println(CommonChars(words2))
+	ret := FourSum(nums,0)
+	fmt.Println(ret)
+
 }
