@@ -3,6 +3,29 @@ package string
 import "fmt"
 
 /*
+	编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。
+
+	不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。
+
+	你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。
+
+	示例 1：
+	输入：["h","e","l","l","o"]
+	输出：["o","l","l","e","h"]
+*/
+
+// reverse 344.反转字符串
+func reverse(b []byte) {
+	left := 0
+	right := len(b) - 1
+	for left < right {
+		b[left], b[right] = b[right], b[left]
+		left++
+		right--
+	}
+}
+
+/*
 	给定一个字符串 s 和一个整数 k，从字符串开头算起, 每计数至 2k 个字符，就反转这 2k 个字符中的前 k 个字符。
 
 	如果剩余字符少于 k 个，则将剩余字符全部反转。
@@ -13,7 +36,8 @@ import "fmt"
 	输入: s = "abcdefg", k = 2
 	输出: "bacdfeg"
 */
-func ReverseStr(s string, k int) string {
+// reverseStr 541. 反转字符串II
+func reverseStr(s string, k int) string {
 	ss := []byte(s)
 	length := len(s)
 	for i := 0; i < length; i += 2 * k {
@@ -28,34 +52,45 @@ func ReverseStr(s string, k int) string {
 	return string(ss)
 }
 
-func reverse(b []byte) {
-	left := 0
-	right := len(b) - 1
-	for left < right {
-		b[left], b[right] = b[right], b[left]
-		left++
+/*
+	请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+
+	示例 1： 输入：s = "We are happy."
+
+	输出："We%20are%20happy."
+*/
+
+// replaceSpace 05.替换空格
+func replaceSpace(s string) string {
+	nums := 0
+
+	// 第一步：扩展原有的空间
+	temp := []byte(s)
+	for _,v := range temp{
+		if v == ' '{
+			nums++
+		}
+	}
+
+	newSpace := make([]byte,nums * 2)
+	temp = append(temp,newSpace...)
+
+	// 第二步：双指针从后往前走
+	left,right := len(s)-1,len(temp)-1
+	for left >= 0{
+		if temp[left] != ' '{
+			temp[right] = temp[left]
+		}else{
+			temp[right] = '0'
+			temp[right - 1] = '2'
+			temp[right - 2] = '%'
+			right = right - 2
+		}
 		right--
+		left--
 	}
-}
 
-func ReplaceSpace(s string) string {
-	length := len(s)
-	spaceNums := 0
-	for i:=0;i<length;i++{
-		if s[i] == ' '{
-			spaceNums++
-		}
-	}
-	tempSlice := make([]byte,0)
-	for i:=0;i<length;i++{
-		if s[i] == ' '{
-			tempSlice = append(tempSlice,'%','2','0')
-			continue
-		}
-		tempSlice = append(tempSlice,s[i])
-
-	}
-	return string(tempSlice)
+	return string(temp)
 }
 
 /*
@@ -75,41 +110,58 @@ func ReplaceSpace(s string) string {
 	输出: "example good a"
 	解释: 如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
 */
-func ReverseWords(s string) string {
+// reverseWords 151.翻转字符串里的单词
+func reverseWords(s string) string {
+	// 1.去除多余的空格
+	// 2.把整个字符串倒转
+	// 3. 倒转单词
+
+	//1.使用双指针删除冗余的空格
+	slowIndex, fastIndex := 0, 0
 	temp := []byte(s)
-	// 处理多余的空格
-	fastIndex,lowIndex := 0,0
-	for temp[fastIndex] == ' '{ // 最前
+	//删除头部冗余空格
+	for len(temp) > 0 && fastIndex < len(temp) && temp[fastIndex] == ' ' {
 		fastIndex++
 	}
-	length := len(temp)
-	for ;fastIndex<length;fastIndex++{ // 处理中间重复的空格
+	//删除单词间冗余空格
+	for ; fastIndex < len(temp); fastIndex++ {
 		if fastIndex-1 > 0 && temp[fastIndex-1] == temp[fastIndex] && temp[fastIndex] == ' ' {
 			continue
 		}
-		temp[lowIndex] = temp[fastIndex]
-		lowIndex++
+		temp[slowIndex] = temp[fastIndex]
+		slowIndex++
 	}
 	//删除尾部冗余空格
-	if lowIndex-1 > 0 && temp[lowIndex-1] == ' ' {
-		temp = temp[:lowIndex-1]
+	if slowIndex-1 > 0 && temp[slowIndex-1] == ' ' {
+		temp = temp[:slowIndex-1]
 	} else {
-		temp = temp[:lowIndex]
+		temp = temp[:slowIndex]
 	}
-	s = ""
-	// 从后遍历，把字符加到 s 中
-	nums := 0
-	for i := len(temp) - 1;i >= 0;i--{
-		nums++
+
+	// 2.反转整个字符串
+	reverse1(temp,0,len(temp) - 1)
+
+	// 3.反转单词
+	start := 0
+	for i:=0;i<len(temp);i++{
 		if temp[i] == ' '{
-			s = s + string(temp[i+1:i+nums]) + string(temp[i])
-			nums = 0
+			reverse1(temp,start,i-1)
+			start = i + 1
 		}
-		if i == 0{
-			s = s + string(temp[i:i+nums])
+		if i == len(temp) - 1{
+			reverse1(temp,start,i)
 		}
 	}
-	return s
+
+	return string(temp)
+}
+
+func reverse1(b []byte,left,right int) {
+	for left < right {
+		b[left], b[right] = b[right], b[left]
+		left++
+		right--
+	}
 }
 
 /*

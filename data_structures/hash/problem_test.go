@@ -20,7 +20,7 @@ func TestIsAnagram(t *testing.T) {
 func TestFourSum(t *testing.T) {
 	nums := []int{1,0,-1,0,-2,2}
 
-	ret := FourSum(nums,0)
+	ret := fourSum(nums,0)
 	fmt.Println(ret)
 
 }
