@@ -179,12 +179,15 @@ func reverse1(b []byte,left,right int) {
 1 <= k < s.length <= 10000
 */
 
-func ReverseLeftWords(s string, n int) string {
-	if len(s) < n{
-		return ""
-	}
+// reverseLeftWords 58-II.左旋转字符串
+func reverseLeftWords(s string, n int) string {
 	temp := []byte(s)
-	return string(append(temp[n:],temp[:n]...))
+
+	reverse1(temp,0,n-1)
+	reverse1(temp,n,len(s)-1)
+	reverse1(temp,0,len(s)-1)
+
+	return string(temp)
 }
 
 /*

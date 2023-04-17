@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func reverseWords(s string) string {
 	// 1.去除多余的空格
 	// 2.把整个字符串倒转
@@ -56,8 +54,6 @@ func reverse(b []byte,left,right int) {
 }
 
 func main()  {
-	s := "F R  I   E    N     D      S      "
-    fmt.Println(s)
-	ret := reverseWords(s)
-	fmt.Println(ret)
+
+
 }
