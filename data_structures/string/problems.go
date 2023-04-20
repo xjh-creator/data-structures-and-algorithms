@@ -1,7 +1,5 @@
 package string
 
-import "fmt"
-
 /*
 	编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。
 
@@ -191,6 +189,61 @@ func reverseLeftWords(s string, n int) string {
 }
 
 /*
+	实现 strStr() 函数。
+
+	给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+
+	示例 1: 输入: haystack = "hello", needle = "ll" 输出: 2
+
+	示例 2: 输入: haystack = "aaaaa", needle = "bba" 输出: -1
+
+	说明: 当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。 对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与C语言的 strstr() 以及 Java的 indexOf() 定义相符。
+*/
+// strStr 28. 实现 strStr() KMP
+func strStr(haystack string, needle string) int {
+	if len(needle) == 0{
+		return 0
+	}
+
+	nextArray := getNext(needle)
+
+	j := -1
+	for i:=0;i<len(haystack);i++{
+		for j >= 0 && haystack[i] != needle[j+1]{
+			j = nextArray[j]
+		}
+		if haystack[i] == needle[j+1]{
+			j++
+		}
+		if j == len(needle) - 1{
+			return i - len(needle) + 1
+		}
+	}
+
+	return -1
+}
+
+
+func getNext(s string)[]int{
+	ret := make([]int,len(s))
+
+	j := -1
+	ret[0] = j
+
+	for i:=1;i<len(s);i++{
+		for j >= 0 && s[i] != s[j+1]{
+			j = ret[j]
+		}
+		if s[i] == s[j+1]{
+			j++
+		}
+		ret[i] = j
+	}
+
+	return ret
+}
+
+/*
 	给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
 
 示例 1:
@@ -208,33 +261,30 @@ func reverseLeftWords(s string, n int) string {
 解释: 可由子字符串 "abc" 重复四次构成。 (或者子字符串 "abcabc" 重复两次构成。)
 */
 
-func RepeatedSubstringPattern(s string) bool {
+// repeatedSubstringPattern 459.重复的子字符串, 使用前缀表的形式解决
+func repeatedSubstringPattern(s string) bool {
 	length := len(s)
 	if length < 2{
 		return false
 	}
-	tempS := []byte(s)
-	for i:=0;i<length;i++{
-		childLen := i + 1
-		if length % childLen > 0{
-			continue
+
+	next := make([]int,length)
+	j := -1
+	next[0] = j
+	for i:=1;i<length;i++{
+		for j >= 0 && s[i] != s[j+1]{
+			j = next[j]
 		}
-		temp := ""
-		nums := 0
-		for{
-			nums++
-			temp = fmt.Sprintf("%s%s",temp,string(tempS[:i+1]))
-			tempLen := len(temp)
-			if tempLen == length{
-				break
-			}
+		if s[i] == s[j +1]{
+			j++
 		}
-		fmt.Println(i,"---2",temp)
-		if temp == s && nums > 1{
-			return true
-		}
-		nums = 0
+		next[i] = j
 	}
+
+	if next[length - 1] != -1 && length % (length - next[length-1] - 1) == 0{
+		return true
+	}
+
 	return false
 }
 
