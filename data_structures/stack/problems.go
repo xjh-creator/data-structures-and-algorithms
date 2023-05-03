@@ -1,5 +1,7 @@
 package stack
 
+import "strconv"
+
 /*
 	使用栈实现队列的下列操作：
 
@@ -92,4 +94,62 @@ func isValid(s string) bool {
 		}
 	}
 	return len(stack) == 0
+}
+
+// removeDuplicates 1047. 删除字符串中的所有相邻重复项
+func removeDuplicates(s string) string {
+	stack := make([]byte,0,len(s))
+	for i := 0; i < len(s);i++ {
+		length := len(stack)
+		// 栈不空 且 与栈顶元素不等
+		if len(stack) > 0 && stack[length-1] == s[i] {
+			// 弹出栈顶元素 并 忽略当前元素(s[i])
+			stack = stack[:length-1]
+		}else{
+			// 入栈
+			stack = append(stack, s[i])
+		}
+	}
+	return string(stack)
+}
+
+/*
+	据 逆波兰表示法，求表达式的值。
+
+有效的运算符包括 + ,  - ,  * ,  / 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。
+
+说明：
+
+整数除法只保留整数部分。 给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。
+
+示例 1：
+
+    输入: ["2", "1", "+", "3", " * "]
+    输出: 9
+    解释: 该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9
+
+*/
+// evalRPN 150. 逆波兰表达式求值
+func evalRPN(tokens []string) int {
+	stack := []int{}
+	for _, token := range tokens {
+		val, err := strconv.Atoi(token)
+		if err == nil {
+			stack = append(stack, val)
+		} else {   // 如果err不为nil说明不是数字
+			num1, num2 := stack[len(stack)-2], stack[(len(stack))-1]
+			stack = stack[:len(stack)-2]
+			switch token {
+			case "+":
+				stack = append(stack, num1+num2)
+			case "-":
+				stack = append(stack, num1-num2)
+			case "*":
+				stack = append(stack, num1*num2)
+			case "/":
+				stack = append(stack, num1/num2)
+			}
+		}
+	}
+	return stack[0]
 }
