@@ -556,3 +556,164 @@ func findMode(root *TreeNode) []int {
 
 	return ret
 }
+
+// lowestCommonAncestor 236. 二叉树的最近公共祖先
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root == p || root == q || root == nil{
+		return root
+	}
+
+	left := lowestCommonAncestor(root.Left,p,q)
+	right := lowestCommonAncestor(root.Right,p,q)
+
+	if left != nil && right != nil{
+		return root
+	}
+
+	if left != nil{
+		return left
+	}
+
+	if right != nil{
+		return right
+	}
+
+	return nil
+}
+
+// lowestCommonAncestor2 235. 二叉搜索树的最近公共祖先
+func lowestCommonAncestor2(root, p, q *TreeNode) *TreeNode {
+	for{
+		if root.Val > p.Val && root.Val > q.Val {
+			root = root.Left
+		}
+		if root.Val < p.Val && root.Val < q.Val {
+			root = root.Right
+		}
+		if (root.Val - p.Val) * (root.Val - q.Val) <= 0 {
+			return root
+		}
+	}
+
+	return root
+}
+
+// insertIntoBST 701.二叉搜索树中的插入操作
+func insertIntoBST(root *TreeNode, val int) *TreeNode {
+	if root == nil {
+		root = &TreeNode{Val: val}
+		return root
+	}
+	if root.Val > val {
+		root.Left = insertIntoBST(root.Left, val)
+	} else {
+		root.Right = insertIntoBST(root.Right, val)
+	}
+	return root
+}
+
+// deleteNode 450.删除二叉搜索树中的节点
+func deleteNode(root *TreeNode, key int) *TreeNode {
+	// 情况一：没找到删除的节点，遍历到空节点直接返回了
+	if root == nil {
+		return nil
+	}
+
+	if key < root.Val { // 遍历左子树
+		root.Left = deleteNode(root.Left, key)
+		return root
+	}
+	if key > root.Val { // 遍历右子树
+		root.Right = deleteNode(root.Right, key)
+		return root
+	}
+
+	// 当前 root 的值是要删除的
+	// 情况二：左右孩子都为空（叶子节点），直接删除节点， 返回NULL为根节点
+	// 情况三：删除节点的左孩子为空，右孩子不为空，删除节点，右孩子补位，返回右孩子为根节点
+	// 情况四：删除节点的右孩子为空，左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点
+	if root.Right == nil {
+		return root.Left
+	}
+	if root.Left == nil{
+		return root.Right
+	}
+
+	// 情况五：左右孩子节点都不为空，则将删除节点的左子树头结点（左孩子）放到删除节点的右子树的最左面节点的左孩子上，返回删除节点右孩子为新的根节点。
+	minnode := root.Right
+	for minnode.Left != nil {
+		minnode = minnode.Left
+	}
+	root.Val = minnode.Val
+	root.Right = deleteNode1(root.Right)
+	return root
+}
+
+func deleteNode1(root *TreeNode)*TreeNode {
+	if root.Left == nil {
+		pRight := root.Right
+		root.Right = nil
+		return pRight
+	}
+	root.Left = deleteNode1(root.Left)
+	return root
+}
+
+// trimBST 669. 修剪二叉搜索树
+func trimBST(root *TreeNode, low int, high int) *TreeNode {
+	if root == nil{
+		return root
+	}
+
+	if root.Val > high{
+		return trimBST(root.Left,low,high)
+	}
+	if root.Val < low{
+		return trimBST(root.Right,low,high)
+	}
+
+	root.Left = trimBST(root.Left,low,high)
+	root.Right = trimBST(root.Right,low,high)
+
+	return root
+}
+
+// sortedArrayToBST 108.将有序数组转换为二叉搜索树
+func sortedArrayToBST(nums []int) *TreeNode {
+	if len(nums) == 0{
+		return nil
+	}
+
+	index := len(nums) / 2
+	node := &TreeNode{
+		Val:nums[index],
+	}
+
+	node.Left = sortedArrayToBST(nums[:index])
+	node.Right = sortedArrayToBST(nums[index+1:])
+
+	return node
+}
+
+// convertBST 538.把二叉搜索树转换为累加树
+func convertBST(root *TreeNode) *TreeNode {
+	sum := 0
+
+	var recur func(root *TreeNode)
+	recur = func(root *TreeNode){
+		if root == nil{
+			return
+		}
+
+		recur(root.Right)
+
+		sum += root.Val
+		root.Val = sum
+
+		recur(root.Left)
+	}
+
+	recur(root)
+
+	return root
+}
