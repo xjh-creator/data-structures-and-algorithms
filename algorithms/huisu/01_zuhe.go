@@ -16,29 +16,30 @@ import "sort"
 		[1,4],
 	]
 */
-
+// combine 第77题. 组合
 func combine(n int,k int) [][]int {
 	res := [][]int{}
-	if n <= 0 || k <= 0 || k > n {
-		return res
-	}
-	var backtracking1 func(n,k,start int,track []int)
-	backtracking1 = func (n,k,start int,track []int){
-		if len(track)==k{
+	path := []int{}
+
+	var backtracking func(start int)
+	backtracking = func (start int){
+		if len(path)==k{
 			temp:=make([]int,k)
-			copy(temp,track)
+			copy(temp,path)
 			res=append(res,temp)
-		}
-		if len(track)+n-start+1 < k { // 优化点：走过的 + 未走的 < 限定的 需要跳过
 			return
 		}
+
 		for i:=start;i<=n;i++{
-			track=append(track,i) // 处理节点
-			backtracking1(n,k,i+1,track) // 递归
-			track=track[:len(track)-1] // 回溯，撤销处理的节点
+			if n - i + 1 < k - len(path) {  // 剪枝
+				break
+			}
+			path=append(path,i) // 处理节点
+			backtracking(i+1) // 递归
+			path=path[:len(path)-1] // 回溯，撤销处理的节点
 		}
 	}
-	backtracking1(n, k, 1, []int{})
+	backtracking(1)
 	return res
 }
 
@@ -55,13 +56,10 @@ func combine(n int,k int) [][]int {
 */
 // combinationSum3 216.组合总和III
 func combinationSum3(k int, n int) [][]int {
-	var (
-		res [][]int
-		path  []int
-	)
+	res, path := make([][]int, 0), make([]int, 0, k)
 
-	var dfs func(k, n int, start int, sum int)
-	dfs = func(k, n int, start int, sum int){
+	var dfs func(start int, sum int)
+	dfs = func(start int, sum int){
 		if len(path) == k {
 			if sum == n {
 				tmp := make([]int, k)
@@ -75,60 +73,16 @@ func combinationSum3(k int, n int) [][]int {
 				break
 			}
 			path = append(path, i)
-			dfs(k, n, i+1, sum+i)
+			dfs(i+1, sum+i)
 			path = path[:len(path)-1]
 		}
 	}
 
-	res, path = make([][]int, 0), make([]int, 0, k)
-	dfs(k, n, 1, 0)
+	dfs(1, 0)
+
 	return res
 }
 
-/*
-	给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
-
-	给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
-
-	示例: 输入："23" 输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
-
-	说明：尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。
-*/
-// LetterCombinations 电话号码的字母组合
-func LetterCombinations(digits string) []string {
-	if digits == ""{
-		return nil
-	}
-	path1,res := make([]rune,0),make([]string,0)
-
-	digitsMap := map[byte]string{
-		'2':"abc",
-		'3':"def",
-		'4':"ghi",
-		'5':"jkl",
-		'6':"mno",
-		'7':"pqrs",
-		'8':"tuv",
-		'9':"wxyz",
-	}
-
-	var dfs func(digits string,start int,path []rune)
-	dfs = func(digits string,start int,path []rune) {
-		if len(path) == len(digits){
-			temp := string(path)
-			res = append(res,temp)
-			return
-		}
-
-		for _,v := range digitsMap[digits[start]]{
-			path = append(path,v)
-			dfs(digits,start+1,path)
-			path = path[:len(path)-1]
-		}
-	}
-	dfs(digits,0,path1)
-	return res
-}
 /*
 	给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
 
@@ -143,30 +97,84 @@ func LetterCombinations(digits string) []string {
 
 	示例 2： 输入：candidates = [2,3,5], target = 8, 所求解集为： [   [2,2,2,2],   [2,3,3],   [3,5] ]
 */
-// CombinationSum
-func CombinationSum(candidates []int, target int) [][]int {
+// combinationSum 39. 组合总和
+func combinationSum(candidates []int, target int) [][]int {
 	res := make([][]int,0)
+	path := make([]int,0,len(candidates))
 
-	var dfs func(candidates []int,start,target int,path []int)
-	dfs = func(candidates []int,start,target int,path []int) {
+	var dfs func(start,target int)
+	dfs = func(start,target int){
 		if target == 0{
 			temp := make([]int,len(path))
 			copy(temp,path)
 			res = append(res,temp)
 			return
 		}
+
 		for i:=start;i<len(candidates);i++{
-			if candidates[i] > target {  // 剪枝，提前返回
+			if candidates[i] > target{
 				break
 			}
+			if i != start && candidates[i] == candidates[i-1]{
+				continue
+			}
 			path = append(path,candidates[i])
-			dfs(candidates,i,target-candidates[i],path)
+			dfs(i+1,target - candidates[i])
 			path = path[:len(path) - 1]
 		}
 	}
-	path := make([]int,0)
+
 	sort.Ints(candidates)
-	dfs(candidates,0,target,path)
+	dfs(0,target)
+
+	return res
+}
+
+/*
+	给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
+
+	给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+
+	示例: 输入："23" 输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+
+	说明：尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。
+*/
+// letterCombinations 17.电话号码的字母组合
+func letterCombinations(digits string) []string {
+	if len(digits) == 0{
+		return nil
+	}
+
+	tempMap := map[byte]string{
+		'2':"abc",
+		'3':"def",
+		'4':"ghi",
+		'5':"jkl",
+		'6':"mno",
+		'7':"pqrs",
+		'8':"tuv",
+		'9':"wxyz",
+	}
+
+	path,res := make([]rune,0,len(digits)),make([]string,0,len(digits))
+
+	var dfs func(start int)
+	dfs = func(start int){
+		if len(path) == len(digits){
+			temp := string(path)
+			res = append(res,temp)
+			return
+		}
+
+		for _,v := range tempMap[digits[start]]{
+			path = append(path,v)
+			dfs(start + 1)
+			path = path[:len(path) - 1]
+		}
+	}
+
+	dfs(0)
+
 	return res
 }
 
@@ -213,4 +221,52 @@ func CombinationSum2(candidates []int, target int) [][]int {
 	dfs(candidates,0,target,path)
 	return res
 }
+
+// partition 131.分割回文串
+func partition(s string) [][]string {
+	res := make([][]string,0)
+	path := make([]string,0,len(s))
+
+	var dfs func(start int)
+	dfs = func(start int){
+		if start == len(s){
+			temp := make([]string,len(path))
+			copy(temp,path)
+			res = append(res,temp)
+			return
+		}
+
+		for i:=start;i<len(s);i++{
+			str := s[start:i+1]
+			if judge(str){
+				path = append(path,str)
+				dfs(i+1)
+				path = path[:len(path) - 1]
+			}
+		}
+	}
+
+	dfs(0)
+
+	return res
+
+}
+
+func judge(s string) bool{
+	if len(s) == 0{
+		return false
+	}
+
+	l,r := 0,len(s) - 1
+	for l < r{
+		if s[l] != s[r]{
+			return false
+		}
+		l++
+		r--
+	}
+
+	return true
+}
+
 

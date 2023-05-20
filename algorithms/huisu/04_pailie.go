@@ -14,31 +14,32 @@ import "sort"
 // Permute 46.全排列
 func Permute(nums []int) [][]int {
 	res := make([][]int,0)
-	path := make([]int,0)
-	numsLen := len(nums)
-	state := make([]bool,numsLen)
+	path := make([]int,0,len(nums))
+	state := make([]bool,len(nums))
 
-	var dfs func()
-	dfs = func() {
-		pathLen := len(path)
-		if pathLen == numsLen{
-			temp := make([]int,pathLen)
+	var dfs func(cur int)
+	dfs = func(cur int){
+		if cur == len(nums){
+			temp := make([]int,len(path))
 			copy(temp,path)
 			res = append(res,temp)
+
 			return
 		}
 
-		for i:=0;i<numsLen;i++{
+		for i:=0;i<len(nums);i++{
 			if !state[i]{
 				path = append(path,nums[i])
 				state[i] = true
-				dfs()
+				dfs(cur+1)
 				state[i] = false
-				path = path[:len(path)-1]
+				path = path[:len(path) - 1]
 			}
 		}
 	}
-	dfs()
+
+	dfs(0)
+
 	return res
 }
 
@@ -61,25 +62,24 @@ func Permute(nums []int) [][]int {
     -10 <= nums[i] <= 10
 
 */
-// PermuteUnique
+// PermuteUnique 47.全排列 II
 func PermuteUnique(nums []int) [][]int {
 	res := make([][]int,0)
-	path := make([]int,0)
-	numsLen := len(nums)
-	state := make([]bool,numsLen)
+	path := make([]int,0,len(nums))
+	state := make([]bool,len(nums))
 	sort.Ints(nums)
 
-	var dfs func()
-	dfs = func() {
-		pathLen := len(path)
-		if pathLen == numsLen{
-			temp := make([]int,pathLen)
+	var dfs func(cur int)
+	dfs = func(cur int){
+		if cur == len(nums){
+			temp := make([]int,len(path))
 			copy(temp,path)
 			res = append(res,temp)
+
 			return
 		}
 
-		for i:=0;i<numsLen;i++{
+		for i:=0;i<len(nums);i++{
 			if i != 0 && nums[i] == nums[i-1] && !state[i-1]{
 				continue
 			}
@@ -87,12 +87,14 @@ func PermuteUnique(nums []int) [][]int {
 			if !state[i]{
 				path = append(path,nums[i])
 				state[i] = true
-				dfs()
+				dfs(cur+1)
 				state[i] = false
-				path = path[:len(path)-1]
+				path = path[:len(path) - 1]
 			}
 		}
 	}
-	dfs()
+
+	dfs(0)
+
 	return res
 }

@@ -9,25 +9,26 @@ import "sort"
 
 	示例: 输入: nums = [1,2,3] 输出: [ [3],   [1],   [2],   [1,2,3],   [1,3],   [2,3],   [1,2],   [] ]
 */
-// subsets
+// subsets 78.子集
 func subsets(nums []int) [][]int {
 	res := make([][]int,0)
-	length := len(nums)
-	path := make([]int,0,length)
+	path := make([]int,0,len(nums))
 
 	var dfs func(start int)
-	dfs = func(start int) {
+	dfs = func(start int){
 		temp := make([]int,len(path))
 		copy(temp,path)
 		res = append(res,temp)
 
-		for i:=start;i<length;i++{
+		for i:=start;i<len(nums);i++{
 			path = append(path,nums[i])
 			dfs(i+1)
-			path = path[:len(path)-1]
+			path = path[:len(path) - 1]
 		}
 	}
+
 	dfs(0)
+
 	return res
 }
 
